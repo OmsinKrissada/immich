@@ -9,6 +9,7 @@
   import { Icon } from '@immich/ui';
   import { mdiShareVariantOutline } from '@mdi/js';
   import { t } from 'svelte-i18n';
+  import { getByteUnitString } from '../../utils/byte-units';
 
   interface Props {
     album: AlbumResponseDto;
@@ -71,5 +72,8 @@
     {:else}
       -
     {/if}
+  </td>
+  <td class="text-md text-ellipsis text-center hidden xl:block xl:w-[15%] 2xl:w-[12%]">
+    {getByteUnitString(album.size)}
   </td>
 </tr>

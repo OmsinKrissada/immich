@@ -116,6 +116,7 @@ export enum AlbumSortBy {
   DateCreated = 'DateCreated',
   MostRecentPhoto = 'MostRecentPhoto',
   OldestPhoto = 'OldestPhoto',
+  Size = 'Size',
 }
 
 export const albumViewSettings = persisted<AlbumViewSettings>('album-view-settings', {

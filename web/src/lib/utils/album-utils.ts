@@ -85,6 +85,11 @@ export const sortOptionsMetadata: AlbumSortOptionMetadata[] = [
     defaultOrder: SortOrder.Desc,
     columnStyle: 'text-center hidden xl:block xl:w-[15%] 2xl:w-[12%]',
   },
+  {
+    id: AlbumSortBy.Size,
+    defaultOrder: SortOrder.Desc,
+    columnStyle: 'text-center hidden xl:block xl:w-[15%] 2xl:w-[12%]',
+  },
 ];
 
 export const findSortOptionMetadata = (sortBy: string) => {
@@ -252,6 +257,12 @@ const sortOptions: AlbumSortOption = {
   [AlbumSortBy.OldestPhoto]: (order, albums) => {
     albums = orderBy(albums, [({ startDate }) => (startDate ? new Date(startDate) : '')], [order]);
     return albums.sort(sortUnknownYearAlbums);
+  },
+  
+  /** Sort by album size */
+  [AlbumSortBy.Size]: (order, albums) => {
+    albums = orderBy(albums, [({ size }) => size], [order]);
+    return albums;
   },
 };
 

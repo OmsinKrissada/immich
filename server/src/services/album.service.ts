@@ -69,6 +69,7 @@ export class AlbumService extends BaseService {
       assetCount: albumMetadata[album.id]?.assetCount ?? 0,
       // lastModifiedAssetTimestamp is only used in mobile app, please remove if not need
       lastModifiedAssetTimestamp: albumMetadata[album.id]?.lastModifiedAssetTimestamp ?? undefined,
+      size: albumMetadata[album.id]?.size ?? 0,
     }));
   }
 

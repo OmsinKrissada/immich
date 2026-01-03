@@ -7,6 +7,7 @@
   import { IconButton } from '@immich/ui';
   import { mdiDotsVertical } from '@mdi/js';
   import { t } from 'svelte-i18n';
+  import { getByteUnitString } from '../../utils/byte-units';
 
   interface Props {
     album: AlbumResponseDto;
@@ -79,6 +80,11 @@
           {$t('items_count', { values: { count: album.assetCount } })}
         </p>
       {/if}
+
+      <p>•</p>
+      <p>
+        {getByteUnitString(album.size)}
+      </p>
 
       {#if (showOwner || album.shared) && showItemCount}
         <p>•</p>

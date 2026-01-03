@@ -15,6 +15,7 @@ export interface AlbumAssetCount {
   startDate: Date | null;
   endDate: Date | null;
   lastModifiedAssetTimestamp: Date | null;
+  size: number;
 }
 
 export interface AlbumInfoOptions {
@@ -126,12 +127,21 @@ export class AlbumRepository {
         .selectFrom('asset')
         .$call(withDefaultVisibility)
         .innerJoin('album_asset', 'album_asset.assetId', 'asset.id')
+        .innerJoin('asset_exif', 'asset_exif.assetId', 'asset.id')
+        .leftJoin('asset_exif as livePhotoExif', 'livePhotoExif.assetId', 'asset.livePhotoVideoId')
         .select('album_asset.albumId as albumId')
         .select((eb) => eb.fn.min(sql<Date>`("asset"."localDateTime" AT TIME ZONE 'UTC'::text)::date`).as('startDate'))
         .select((eb) => eb.fn.max(sql<Date>`("asset"."localDateTime" AT TIME ZONE 'UTC'::text)::date`).as('endDate'))
         // lastModifiedAssetTimestamp is only used in mobile app, please remove if not need
         .select((eb) => eb.fn.max('asset.updatedAt').as('lastModifiedAssetTimestamp'))
         .select((eb) => sql<number>`${eb.fn.count('asset.id')}::int`.as('assetCount'))
+        // Calculate size by summing fileSizeInByte from assets including live photo videos if any
+        .select(
+          (eb) =>
+            sql<number>`${eb.fn.sum(sql`COALESCE("asset_exif"."fileSizeInByte", 0) + COALESCE("livePhotoExif"."fileSizeInByte", 0)`)}::int`.as(
+              'size',
+            ),
+        )
         .where('album_asset.albumId', 'in', ids)
         .where('asset.deletedAt', 'is', null)
         .groupBy('album_asset.albumId')
