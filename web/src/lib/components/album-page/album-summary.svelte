@@ -2,6 +2,7 @@
   import { getAlbumDateRange } from '$lib/utils/date-time';
   import type { AlbumResponseDto } from '@immich/sdk';
   import { t } from 'svelte-i18n';
+  import { getByteUnitString } from '../../utils/byte-units';
 
   interface Props {
     album: AlbumResponseDto;
@@ -14,4 +15,6 @@
   <span>{getAlbumDateRange(album)}</span>
   <span>•</span>
   <span>{$t('items_count', { values: { count: album.assetCount } })}</span>
+  <span>•</span>
+  <span>{getByteUnitString(album.size)}</span>
 </span>
