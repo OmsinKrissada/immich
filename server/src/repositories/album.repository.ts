@@ -138,7 +138,7 @@ export class AlbumRepository {
         // Calculate size by summing fileSizeInByte from assets including live photo videos if any
         .select(
           (eb) =>
-            sql<number>`${eb.fn.sum(sql`COALESCE("asset_exif"."fileSizeInByte", 0) + COALESCE("livePhotoExif"."fileSizeInByte", 0)`)}::int`.as(
+            sql<number>`${eb.fn.sum(sql`COALESCE("asset_exif"."fileSizeInByte", 0) + COALESCE("livePhotoExif"."fileSizeInByte", 0)`)}::bigint`.as(
               'size',
             ),
         )
