@@ -73,7 +73,7 @@ export class AlbumService extends BaseService {
     }));
   }
 
-  async get(auth: AuthDto, id: string, dto: AlbumInfoDto): Promise<AlbumResponseDto> {
+  async get(auth: AuthDto, id: string, dto: AlbumInfoDto): Promise<AlbumResponseDto & {size: number}> {
     await this.requireAccess({ auth, permission: Permission.AlbumRead, ids: [id] });
     await this.albumRepository.updateThumbnails();
     const withAssets = dto.withoutAssets === undefined ? true : !dto.withoutAssets;
@@ -91,6 +91,7 @@ export class AlbumService extends BaseService {
       assetCount: albumMetadataForIds?.assetCount ?? 0,
       lastModifiedAssetTimestamp: albumMetadataForIds?.lastModifiedAssetTimestamp ?? undefined,
       contributorCounts: isShared ? await this.albumRepository.getContributorCounts(album.id) : undefined,
+      size: albumMetadataForIds?.size ?? 0,
     };
   }
 
